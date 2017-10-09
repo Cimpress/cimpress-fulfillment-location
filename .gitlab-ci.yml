@@ -10,5 +10,7 @@ build:
 
 publish:
   stage: publish
+  only:
+    - master
   script:
-  - node node_modules/grunt-cli/bin/grunt publish
+    - node node_modules/grunt-cli/bin/grunt publish
