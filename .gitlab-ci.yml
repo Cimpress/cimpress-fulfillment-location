@@ -1,0 +1,14 @@
+stages:
+  - test
+  - build
+  - publish
+
+build:
+  stage: build
+  script:
+    - npm install && npm run code-check && npm run cover && node node_modules/grunt-cli/bin/grunt build
+
+publish:
+  stage: publish
+  script:
+  - node node_modules/grunt-cli/bin/grunt publish
