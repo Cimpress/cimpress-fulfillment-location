@@ -5,7 +5,7 @@ const npm = /^win/.test(process.platform)
 
 module.exports = function (grunt) {
 
-    const version = "0.1." + process.env.BUILD_NUMBER;
+    const version = "0.1." + process.env.CI_JOB_ID;
     const packageName = "fulfillment-location-service";
     const packageTar = `${packageName}-${version}.tgz`;
 
