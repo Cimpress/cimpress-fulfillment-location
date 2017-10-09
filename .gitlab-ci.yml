@@ -1,3 +1,10 @@
+image: node:boron
+before_script:
+  - npm install
+cache:
+  paths:
+    - node_modules/
+
 stages:
   - test
   - build
@@ -6,7 +13,9 @@ stages:
 build:
   stage: build
   script:
-    - npm install && npm run code-check && npm run cover && node node_modules/grunt-cli/bin/grunt build
+    - npm run code-check
+    - npm run cover
+    - node node_modules/grunt-cli/bin/grunt build
 
 publish:
   stage: publish
