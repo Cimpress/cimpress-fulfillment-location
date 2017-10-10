@@ -1,6 +1,6 @@
 variables:
   PACKAGE_NAME: "fulfillment-location-service"
-  PACKAGE_TAR: "${PACKAGE_NAME}-0.1.${CI_JOB_ID}.tgz"
+  PACKAGE_TAR: "${PACKAGE_NAME}-0.1.${CI_PIPELINE_ID}.tgz"
 
 .node: &node-common
   image: node:boron
