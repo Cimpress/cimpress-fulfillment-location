@@ -35,11 +35,7 @@ module.exports = function (grunt) {
             createTar: {
                 cwd: 'dist',
                 command: `${npm} pack`
-            },
-            pushToAWS: {
-                cwd: 'dist',
-                command: `aws s3 cp ${packageTar} s3://msw-lqp-deploy/${packageName}/${packageTar} --acl public-read`
-            },
+            }
         },
         babel: {
             options: {
