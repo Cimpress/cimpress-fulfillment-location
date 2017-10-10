@@ -47,11 +47,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('buildProps', function () {
-        fs.writeFileSync('build_properties.ini', `GIT_TAG_NAME=${version}\nPACKAGE_VERSION=${version}\n`);
-    });
-
-    grunt.registerTask('build', ['buildProps', 'clean:dist', 'babel', 'copy']);
+    grunt.registerTask('build', ['clean:dist', 'babel', 'copy']);
     grunt.registerTask('prepublish', ['exec:setVersion', 'exec:createTar']);
     grunt.registerTask('publish', ['exec:pushToAWS']);
 };
