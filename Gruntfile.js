@@ -58,5 +58,6 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('build', ['buildProps', 'clean:dist', 'babel', 'copy']);
-    grunt.registerTask('publish', ['exec:setVersion', 'exec:createTar', 'exec:pushToAWS']);
+    grunt.registerTask('prepublish', ['exec:setVersion', 'exec:createTar']);
+    grunt.registerTask('publish', ['exec:pushToAWS']);
 };
