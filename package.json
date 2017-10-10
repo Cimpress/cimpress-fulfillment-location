@@ -1,5 +1,5 @@
 {
-  "name": "fulfillment-location-service",
+  "name": "fulfillment-location-client",
   "version": "0.0.1",
   "author": "LogisticsQuotingandPlanning@cimpress.com",
   "description": "A simple client for TRDLNK's Fulfillment Location service",
