@@ -1,5 +1,5 @@
 variables:
-  VERSION: "0.1.$${CI_JOB_ID}"
+  VERSION: "0.1.$CI_JOB_ID"
   PACKAGE_NAME: "fulfillment-location-service"
   PACKAGE_TAR: "${PACKAGE_NAME}-${VERSION}.tgz"
 
