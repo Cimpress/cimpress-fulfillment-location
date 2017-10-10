@@ -53,4 +53,4 @@ publish:
   only:
     - master
   script:
-    - aws s3 cp .dist/$PACKAGE_TAR s3://msw-lqp-deploy/$PACKAGE_NAME/$PACKAGE_TAR --acl bucket-owner-full-control
+    - aws s3 cp ./dist/$PACKAGE_TAR s3://msw-lqp-deploy/$PACKAGE_NAME/$PACKAGE_TAR --acl bucket-owner-full-control
