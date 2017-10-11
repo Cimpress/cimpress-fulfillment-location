@@ -4,6 +4,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [version] - date
+## [0.1] - 2017-10-11
 ### Added
-- stuff & things
+- Implemented client for Fulfillment Location service, with caching.
