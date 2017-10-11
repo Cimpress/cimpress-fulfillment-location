@@ -4,7 +4,14 @@
   "author": "LogisticsQuotingandPlanning@cimpress.com",
   "description": "A simple client for TRDLNK's Fulfillment Location service",
   "license": "Apache-2.0",
-  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://cimpress.githost.io/qp/fulfillment-location-client.git"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "node-cache": "^4.1.1"
+  },
   "scripts": {
     "test": "mocha --recursive tests",
     "check-cover": "nyc check-coverage",
@@ -30,6 +37,8 @@
     "grunt-exec": "^2.0.0",
     "load-grunt-tasks": "^3.5.2",
     "mocha": "^3.4.2",
-    "nyc": "^11.0.3"
+    "nock": "^9.0.22",
+    "nyc": "^11.0.3",
+    "sinon": "^4.0.1"
   }
 }
