@@ -41,7 +41,8 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    'dist/index.js': 'src/index.js'
+                    'dist/index.js': 'src/index.js',
+                    'dist/fulfillmentLocation.js': 'src/fulfillmentLocation.js'
                 }
             }
         }
