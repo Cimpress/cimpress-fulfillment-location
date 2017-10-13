@@ -6,6 +6,30 @@ const nodeCache = require('node-cache');
 let flCache;
 let axios = require('axios');
 
+function UnauthorizedError(message, extra) {
+    Error.captureStackTrace(this, this.constructor);
+    this.name = this.constructor.name;
+    this.message = message || 'Unauthorized';
+    this.statusCode = 401;
+    this.additionalData = extra;
+}
+
+function ForbiddenError(message, extra) {
+    Error.captureStackTrace(this, this.constructor);
+    this.name = this.constructor.name;
+    this.message = message || 'Forbidden';
+    this.statusCode = 403;
+    this.additionalData = extra;
+}
+
+function NotFoundError(message, extra) {
+    Error.captureStackTrace(this, this.constructor);
+    this.name = this.constructor.name;
+    this.message = message || 'Not found';
+    this.statusCode = 404;
+    this.additionalData = extra;
+}
+
 class FulfillmentLocationClient {
 
     constructor(c) {
@@ -19,7 +43,11 @@ class FulfillmentLocationClient {
         this.timeout = config.timeout || 2000;
     }
 
-    getLocation(authorization, locationId) {
+    getLocation(locationId, authorization) {
+
+        if ( !authorization ) {
+            throw new UnauthorizedError('Unauthorized', 'Missing Authorization header');
+        }
         
         const instance = axios.create({
             baseURL: this.url,
@@ -48,7 +76,16 @@ class FulfillmentLocationClient {
                             return resolve(location);
                         })
                         .catch(err => {
-                            return reject(err);
+                            if ( err.status == 401 ) {
+                                return reject(new UnauthorizedError(err.statusText, err.data));
+                            }
+                            if ( err.status == 403 ) {
+                                return reject(new ForbiddenError(err.statusText, err.data));
+                            }
+                            if ( err.status == 404 ) {
+                                return reject(new NotFoundError(err.statusText, err.data));
+                            }
+                            return reject(new Error(err.statusText));
                         });
 
                 } else {
@@ -60,6 +97,10 @@ class FulfillmentLocationClient {
     }
 
     getLocations(authorization) {
+
+        if ( !authorization ) {
+            throw new UnauthorizedError('Unauthorized', 'Missing Authorization header');
+        }
 
         const instance = axios.create({
             baseURL: this.url,
@@ -88,7 +129,16 @@ class FulfillmentLocationClient {
                             return resolve(locations);
                         })
                         .catch(err => {
-                            return reject(err);
+                            if ( err.status == 401 ) {
+                                return reject(new UnauthorizedError(err.statusText, err.data));
+                            }
+                            if ( err.status == 403 ) {
+                                return reject(new ForbiddenError(err.statusText, err.data));
+                            }
+                            if ( err.status == 404 ) {
+                                return reject(new NotFoundError(err.statusText, err.data));
+                            }
+                            return reject(new Error(err.statusText));
                         });
 
                 } else {
@@ -130,7 +180,7 @@ class FulfillmentLocationClient {
                         this.log.error("<-" + endpoint, err);
                     }
 
-                    return reject(err);
+                    return reject(err.response);
                 });
         });
     }
@@ -167,7 +217,7 @@ class FulfillmentLocationClient {
                         this.log.error("<-" + endpoint, err);
                     }
 
-                    return reject(err);
+                    return reject(err.response);
                 });
         });
     }
