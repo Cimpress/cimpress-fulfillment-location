@@ -176,7 +176,7 @@ describe('getLocations :: with cache ::', function () {
 
                 client.getLocations('Bearer X')
                     .then(data => {
-                        expect(data).to.equal(sampleLocations());
+                        expect(data).to.deep.equal(sampleLocations());
                     })
                     .catch(error => {
                         expect(error).to.not.exist;

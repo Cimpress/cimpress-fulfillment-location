@@ -202,7 +202,7 @@ describe('getLocation :: with cache ::', function () {
                     .reply(500, "Unable to load information for 'bqcjg7qbvep'");
 
                 client
-                    .getLocation('Bearer X', "bqcjg7qbvep")
+                    .getLocation("bqcjg7qbvep", 'Bearer X')
                     .then(data => {
                         expect(data).to.deep.equal(sampleLocation());
                     })
@@ -227,8 +227,8 @@ describe('getLocation :: with cache ::', function () {
                 expect(data).to.not.exist;
             })
             .catch(error => {
-                expect(error.response.status).to.equal(404);
-                expect(error.response.data).to.equal(`Location 'a7uqagcx0nz' not found`);
+                expect(error.status).to.equal(404);
+                expect(error.additionalData).to.equal(`Location 'a7uqagcx0nz' not found`);
             });
     });
 
@@ -266,8 +266,8 @@ describe('getLocation :: with cache ::', function () {
                 expect(data).to.not.exist;
             })
             .catch(error => {
-                expect(error.response.status).to.equal(404);
-                expect(error.response.data).to.equal(`Location '180' not found`);
+                expect(error.status).to.equal(404);
+                expect(error.additionalData).to.equal(`Location '180' not found`);
             });
     });
 });
