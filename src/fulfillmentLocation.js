@@ -6,11 +6,13 @@ const nodeCache = require('node-cache');
 let flCache;
 let axios = require('axios');
 
+// --- Predefined errors ---
+
 function UnauthorizedError(message, extra) {
     Error.captureStackTrace(this, this.constructor);
     this.name = this.constructor.name;
     this.message = message || 'Unauthorized';
-    this.statusCode = 401;
+    this.status = 401;
     this.additionalData = extra;
 }
 
@@ -18,7 +20,7 @@ function ForbiddenError(message, extra) {
     Error.captureStackTrace(this, this.constructor);
     this.name = this.constructor.name;
     this.message = message || 'Forbidden';
-    this.statusCode = 403;
+    this.status = 403;
     this.additionalData = extra;
 }
 
@@ -26,9 +28,22 @@ function NotFoundError(message, extra) {
     Error.captureStackTrace(this, this.constructor);
     this.name = this.constructor.name;
     this.message = message || 'Not found';
-    this.statusCode = 404;
+    this.status = 404;
     this.additionalData = extra;
 }
+
+// --- END ---
+
+const handleAuthorization = (authorization, reject) => {
+    if ( !authorization ) {
+        return reject(new Error('Missing Authorization parameter'));
+    }
+
+    if ( authorization.indexOf('Bearer ') !== 0 ) {
+        return reject(new Error(`Invalid format for Authorization parameter: "${authorization}". Authorization parameter should be in the following`
+            + ` format: "Bearer [token]"`));
+    }
+};
 
 class FulfillmentLocationClient {
 
@@ -45,47 +60,42 @@ class FulfillmentLocationClient {
 
     getLocation(locationId, authorization) {
 
-        if ( !authorization ) {
-            throw new UnauthorizedError('Unauthorized', 'Missing Authorization header');
-        }
-        
-        const instance = axios.create({
-            baseURL: this.url,
-            timeout: this.timeout
-        });
-
-        instance.defaults.headers.common['Authorization'] = authorization;
-
-        if ( !this.useCaching ) {
-            return this._getFulfillmentLocationFromService(instance, locationId);
-        }
-
         return new Promise((resolve, reject) => {
+            handleAuthorization(authorization, reject);
+            
+            const instance = axios.create({
+                baseURL: this.url,
+                timeout: this.timeout
+            });
+
+            instance.defaults.headers.common['Authorization'] = authorization;
+
+            if ( !this.useCaching ) {
+                return this._getFulfillmentLocationFromService(instance, locationId)
+                    .then(location => {
+                        return resolve(location);
+                    })
+                    .catch(err => {
+                        return reject(err);
+                    });
+            }
+
             const cacheKey = 'fulfillmentLocation_' + locationId + '_' + authorization;
             flCache.get(cacheKey, (err, fulfillmentLocation) => {
 
                 if ( err ) {
-                    this.log.error(`Failed to read from node-cache (key=${cacheKey})!?`, err);
+                    this.log.error(`Failed to read from node-cache (key=${cacheKey})`, err);
                 }
 
                 if ( err || (fulfillmentLocation == undefined) ) {
 
                     return this._getFulfillmentLocationFromService(instance, locationId)
-                        .then(function (location) {
+                        .then(location => {
                             flCache.set(cacheKey, location);
                             return resolve(location);
                         })
                         .catch(err => {
-                            if ( err.status == 401 ) {
-                                return reject(new UnauthorizedError(err.statusText, err.data));
-                            }
-                            if ( err.status == 403 ) {
-                                return reject(new ForbiddenError(err.statusText, err.data));
-                            }
-                            if ( err.status == 404 ) {
-                                return reject(new NotFoundError(err.statusText, err.data));
-                            }
-                            return reject(new Error(err.statusText));
+                            return reject(err);
                         });
 
                 } else {
@@ -98,22 +108,26 @@ class FulfillmentLocationClient {
 
     getLocations(authorization) {
 
-        if ( !authorization ) {
-            throw new UnauthorizedError('Unauthorized', 'Missing Authorization header');
-        }
-
-        const instance = axios.create({
-            baseURL: this.url,
-            timeout: this.timeout
-        });
-
-        instance.defaults.headers.common['Authorization'] = authorization;
-
-        if ( !this.useCaching ) {
-            return this._getFulfillmentLocationsFromService(instance);
-        }
-
         return new Promise((resolve, reject) => {
+            handleAuthorization(authorization, reject);
+
+            const instance = axios.create({
+                baseURL: this.url,
+                timeout: this.timeout
+            });
+    
+            instance.defaults.headers.common['Authorization'] = authorization;
+    
+            if ( !this.useCaching ) {
+                return this._getFulfillmentLocationsFromService(instance)
+                    .then(locations => {
+                        return resolve(locations);
+                    })
+                    .catch(err => {
+                        return reject(err);
+                    });
+            }
+
             const cacheKey = 'fulfillmentLocations_' + authorization;
             flCache.get(cacheKey, (err, fulfillmentLocations) => {
 
@@ -124,21 +138,12 @@ class FulfillmentLocationClient {
                 if ( err || (fulfillmentLocations == undefined) ) {
 
                     return this._getFulfillmentLocationsFromService(instance)
-                        .then(function (locations) {
+                        .then(locations => {
                             flCache.set(cacheKey, locations);
                             return resolve(locations);
                         })
                         .catch(err => {
-                            if ( err.status == 401 ) {
-                                return reject(new UnauthorizedError(err.statusText, err.data));
-                            }
-                            if ( err.status == 403 ) {
-                                return reject(new ForbiddenError(err.statusText, err.data));
-                            }
-                            if ( err.status == 404 ) {
-                                return reject(new NotFoundError(err.statusText, err.data));
-                            }
-                            return reject(new Error(err.statusText));
+                            return reject(err);
                         });
 
                 } else {
@@ -180,7 +185,16 @@ class FulfillmentLocationClient {
                         this.log.error("<-" + endpoint, err);
                     }
 
-                    return reject(err.response);
+                    if ( err.status === 401 || (err.response && err.response.status === 401) ) {
+                        return reject(new UnauthorizedError(err.statusText || err.message, err.data || err.response.data));
+                    }
+                    if ( err.status === 403 || (err.response && err.response.status === 403) ) {
+                        return reject(new ForbiddenError(err.statusText || err.message, err.data || err.response.data));
+                    }
+                    if ( err.status === 404 || (err.response && err.response.status === 404) ) {
+                        return reject(new NotFoundError(err.statusText || err.message, err.data || err.response.data));
+                    }
+                    return reject(err);
                 });
         });
     }
@@ -217,7 +231,16 @@ class FulfillmentLocationClient {
                         this.log.error("<-" + endpoint, err);
                     }
 
-                    return reject(err.response);
+                    if ( err.status === 401 || (err.response && err.response.status === 401) ) {
+                        return reject(new UnauthorizedError(err.statusText || err.message, err.data || err.response.data));
+                    }
+                    if ( err.status === 403 || (err.response && err.response.status === 403) ) {
+                        return reject(new ForbiddenError(err.statusText || err.message, err.data || err.response.data));
+                    }
+                    if ( err.status === 404 || (err.response && err.response.status === 404) ) {
+                        return reject(new NotFoundError(err.statusText || err.message, err.data || err.response.data));
+                    }
+                    return reject(err);
                 });
         });
     }
