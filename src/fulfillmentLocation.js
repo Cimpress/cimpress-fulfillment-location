@@ -45,6 +45,19 @@ const handleAuthorization = (authorization, reject) => {
     }
 };
 
+const handleError = (err, reject) => {
+    if ( err.status === 401 || (err.response && err.response.status === 401) ) {
+        return reject(new UnauthorizedError(err.statusText || err.message, err.data || err.response.data));
+    }
+    if ( err.status === 403 || (err.response && err.response.status === 403) ) {
+        return reject(new ForbiddenError(err.statusText || err.message, err.data || err.response.data));
+    }
+    if ( err.status === 404 || (err.response && err.response.status === 404) ) {
+        return reject(new NotFoundError(err.statusText || err.message, err.data || err.response.data));
+    }
+    return reject(err);
+};
+
 class FulfillmentLocationClient {
 
     constructor(c) {
@@ -185,16 +198,7 @@ class FulfillmentLocationClient {
                         this.log.error("<-" + endpoint, err);
                     }
 
-                    if ( err.status === 401 || (err.response && err.response.status === 401) ) {
-                        return reject(new UnauthorizedError(err.statusText || err.message, err.data || err.response.data));
-                    }
-                    if ( err.status === 403 || (err.response && err.response.status === 403) ) {
-                        return reject(new ForbiddenError(err.statusText || err.message, err.data || err.response.data));
-                    }
-                    if ( err.status === 404 || (err.response && err.response.status === 404) ) {
-                        return reject(new NotFoundError(err.statusText || err.message, err.data || err.response.data));
-                    }
-                    return reject(err);
+                    return handleError(err, reject);
                 });
         });
     }
@@ -231,16 +235,7 @@ class FulfillmentLocationClient {
                         this.log.error("<-" + endpoint, err);
                     }
 
-                    if ( err.status === 401 || (err.response && err.response.status === 401) ) {
-                        return reject(new UnauthorizedError(err.statusText || err.message, err.data || err.response.data));
-                    }
-                    if ( err.status === 403 || (err.response && err.response.status === 403) ) {
-                        return reject(new ForbiddenError(err.statusText || err.message, err.data || err.response.data));
-                    }
-                    if ( err.status === 404 || (err.response && err.response.status === 404) ) {
-                        return reject(new NotFoundError(err.statusText || err.message, err.data || err.response.data));
-                    }
-                    return reject(err);
+                    return handleError(err, reject);
                 });
         });
     }

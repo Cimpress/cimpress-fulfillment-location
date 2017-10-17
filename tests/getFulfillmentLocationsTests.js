@@ -72,6 +72,22 @@ describe('getLocations :: without cache ::', function () {
             });
     });
 
+    it('FL service returns 404 for invalid alphanum id', function () {
+        nock('https://fulfillmentlocation.trdlnk.cimpress.io')
+            .get("/v1/fulfillmentlocations")
+            .reply(404);
+
+        let client = new FulfillmentLocationClient({log: defaultLogger()});
+
+        return client.getLocations('Bearer X')
+            .then(data => {
+                expect(data).to.not.exist;
+            })
+            .catch(error => {
+                expect(error.status).to.equal(404);
+            });
+    });
+
     it('FL service returns 401 for unauthorized user', function () {
         nock('https://fulfillmentlocation.trdlnk.cimpress.io')
             .get("/v1/fulfillmentlocations")

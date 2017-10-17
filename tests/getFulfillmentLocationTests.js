@@ -183,35 +183,6 @@ describe('getLocation :: with cache ::', function () {
             });
     });
 
-    it('location is in cache and uses the value in the cache', function () {
-        nock('https://fulfillmentlocation.trdlnk.cimpress.io')
-            .get("/v1/fulfillmentlocations/bqcjg7qbvep")
-            .reply(200, sampleLocation());
-
-        let client = new FulfillmentLocationClient({
-            log: defaultLogger(),
-            cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
-        });
-
-        return client
-            .getLocation("bqcjg7qbvep", 'Bearer X')
-            .then(_data => {
-                // FL service is now returning a 404; client should use data in cache
-                nock('https://fulfillmentlocation.trdlnk.cimpress.io')
-                    .get("/v1/fulfillmentlocations/bqcjg7qbvep")
-                    .reply(500, "Unable to load information for 'bqcjg7qbvep'");
-
-                client
-                    .getLocation("bqcjg7qbvep", 'Bearer X')
-                    .then(data => {
-                        expect(data).to.deep.equal(sampleLocation());
-                    })
-                    .catch(error => {
-                        expect(error).to.not.exist;
-                    });
-            });
-    });
-
     it('FL service returns 404 for invalid alphanum id', function () {
         nock('https://fulfillmentlocation.trdlnk.cimpress.io')
             .get("/v1/fulfillmentlocations/a7uqagcx0nz")
@@ -268,6 +239,57 @@ describe('getLocation :: with cache ::', function () {
             .catch(error => {
                 expect(error.status).to.equal(404);
                 expect(error.additionalData).to.equal(`Location '180' not found`);
+            });
+    });
+
+    it('FL returns 500 :: location is in cache and uses the value in the cache', function () {
+        nock('https://fulfillmentlocation.trdlnk.cimpress.io')
+            .get("/v1/fulfillmentlocations/bqcjg7qbvep")
+            .reply(200, sampleLocation());
+
+        let client = new FulfillmentLocationClient({
+            log: defaultLogger(),
+            cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
+        });
+
+        return client
+            .getLocation("bqcjg7qbvep", 'Bearer X')
+            .then(_data => {
+                // FL service is now returning a 404; client should use data in cache
+                nock('https://fulfillmentlocation.trdlnk.cimpress.io')
+                    .get("/v1/fulfillmentlocations/bqcjg7qbvep")
+                    .reply(500, "Unable to load information for 'bqcjg7qbvep'");
+
+                client
+                    .getLocation("bqcjg7qbvep", 'Bearer X')
+                    .then(data => {
+                        expect(data).to.deep.equal(sampleLocation());
+                    })
+                    .catch(error => {
+                        expect(error).to.not.exist;
+                    });
+            });
+    });
+
+    it('FL returns 500 :: returns an error', function () {
+        nock.cleanAll();
+
+        nock('https://fulfillmentlocation.trdlnk.cimpress.io')
+            .get("/v1/fulfillmentlocations/bqcjg7qbvep")
+            .reply(500, "Unable to load information for 'bqcjg7qbvep'");
+
+        let client = new FulfillmentLocationClient({
+            log: defaultLogger(),
+            cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
+        });
+
+        return client.getLocation("bqcjg7qbvep", 'Bearer X')
+            .then(data => {
+                expect(data).to.not.exist;
+            })
+            .catch(error => {
+                expect(error.response.status).to.equal(500);
+                expect(error.response.data).to.equal("Unable to load information for 'bqcjg7qbvep'");
             });
     });
 });
