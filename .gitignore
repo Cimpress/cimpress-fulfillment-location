@@ -1,0 +1,7 @@
+.idea/
+coverage/
+.vscode/
+node_modules/
+typings/
+.nyc_output
+jsconfig.json
