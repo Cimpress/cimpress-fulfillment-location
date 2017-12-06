@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+- '6'
+install:
+- npm install
+script:
+- npm run code-check
+- npm run cover
+- grunt build
+deploy:
+  provider: npm
+  skip_cleanup: true
+  email: indirapranabudi@gmail.com
+  api_key:
+    secure: ee7KdyuJ4e7DXF+nLVBCcwrPqzUT0Dt/b6hlvPbn0xF3acPGGHaZGcp1vwKAv1+lsiF/KpPPRiYoAIhg0i7YoO1Oj8upcWoFi5PLNX4E9sMKYaQjKtHXQjNnQetn8EGCozM43h660xmi7y7RZtLFtLM2nAyehS6OdHlpdHnLZrvDqeyz16dwqWIrwkA6eUOreysUEYi7kYZslLrZjZZz0mSJ1pLs0+vir4bCDWTlsMiQqT5VNJFiLbXwp2BJmT3KsVjcb6njyHnIMrWXLB96Px8nV6BC+7eyBFFrZUuAcf0zNJkOgs6sL8Uht4cMhPGLX/fTZqP3S4NUkRUlJk0Ix9sLDLnuh2wUJg4MnFvgjdcFNBsKhIbGmMGZC9eDvY/WvSL99EiTyugv0cgKHOWZyv1Q4HIS+4neeioLzNe6OMCU40t+TZFGwRNsGrDaS7hkvDCdUY1Ezg6QEAY4A8xBHpgkufJBaxcjWhjRnriuhfXdzSVrKrJ+3/OlYZrYiKQZcYJfvcdMUnjxZWgiiie6FXgqzIEUHR+sSNBBbhdurtt75RqTErQUN07QNA+NEga5HK3XvJAmAZ3WjCSWaSJ6z+w7u7yUHMb2Nn8sVyPqkiKpUE8TaR65/7onWAeAPggnbg91xp0g5NdSFec3C7Gabbm7/cpJM0BuAVmk3VFlQlQ=
+  on:
+    branch: master
