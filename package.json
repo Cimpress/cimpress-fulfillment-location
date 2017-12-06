@@ -1,6 +1,6 @@
 {
   "name": "fulfillment-location-client",
-  "version": "0.0.1",
+  "version": "0.1",
   "author": "LogisticsQuotingandPlanning@cimpress.com",
   "description": "A simple client for TRDLNK's Fulfillment Location service",
   "license": "Apache-2.0",

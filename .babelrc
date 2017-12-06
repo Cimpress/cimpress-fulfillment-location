@@ -1,0 +1,22 @@
+{
+  "presets": [
+    "es2015"
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        [
+          "istanbul",
+          {
+            "exclude": [
+              "**/node_modules/**",
+              "**/tests/**",
+              "**/coverage/**",
+              "Gruntfile.js"
+            ]
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -35,6 +35,8 @@ client.getLocations(req.headers.authorization)
     });
 ```
 
+You may also run `node sampleUsage.js` as an example.
+
 ### Prerequisites
 * [Node.js](https://nodejs.org/en/)
 

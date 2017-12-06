@@ -1,7 +1,9 @@
-.idea/
-coverage/
-.vscode/
 node_modules/
+*.zip
+coverage/
+npm-debug.log
 typings/
-.nyc_output
+.vscode/
 jsconfig.json
+.idea/
+.nyc_output/
