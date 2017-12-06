@@ -5,7 +5,7 @@ const npm = /^win/.test(process.platform)
 
 module.exports = function (grunt) {
 
-    const version = "0.1." + process.env.CI_PIPELINE_ID;
+    const version = "0.1." + process.env.TRAVIS_BUILD_NUMBER;
 
     require('load-grunt-tasks')(grunt);
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -29,10 +29,6 @@ module.exports = function (grunt) {
             setVersion: {
                 cwd: 'dist',
                 command: `${npm} version ${version} --no-git-tag-version --allow-same-version`
-            },
-            createTar: {
-                cwd: 'dist',
-                command: `${npm} pack`
             }
         },
         babel: {
@@ -48,7 +44,5 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('build', ['clean:dist', 'babel', 'copy']);
-    grunt.registerTask('prepublish', ['exec:setVersion', 'exec:createTar']);
-    grunt.registerTask('publish', ['exec:pushToAWS']);
+    grunt.registerTask('build', ['clean:dist', 'babel', 'copy', 'exec:setVersion']);
 };

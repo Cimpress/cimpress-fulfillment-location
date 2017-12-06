@@ -4,6 +4,9 @@
   "author": "LogisticsQuotingandPlanning@cimpress.com",
   "description": "A simple client for TRDLNK's Fulfillment Location service",
   "license": "Apache-2.0",
+  "engines": {
+    "node": "6.11.1"
+  },
   "repository": {
     "type": "git",
     "url": "https://cimpress.githost.io/qp/fulfillment-location-client.git"
