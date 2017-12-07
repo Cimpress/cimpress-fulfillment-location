@@ -1,0 +1,9 @@
+node_modules/
+*.zip
+coverage/
+npm-debug.log
+typings/
+.vscode/
+jsconfig.json
+.idea/
+.nyc_output/

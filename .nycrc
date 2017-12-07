@@ -1,0 +1,24 @@
+{
+  "include": [
+    "**/*.js",
+    "**/*.jsx"
+  ],
+  "exclude": [
+    "**/coverage/**",
+    "dist/**"
+  ],
+  "require": [
+    "babel-register"
+  ],
+  "reporter": [
+    "html",
+    "text-summary"
+  ],
+  "extension": [
+    ".js"
+  ],
+  "all": true,
+  "cache": true,
+  "sourceMap": false,
+  "instrument": false
+}
