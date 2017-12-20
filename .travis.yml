@@ -7,6 +7,8 @@ script:
 - npm run code-check
 - npm run cover
 - grunt build
+before_deploy:
+- cd dist
 deploy:
   provider: npm
   skip_cleanup: true
