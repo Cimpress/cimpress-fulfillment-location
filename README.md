@@ -6,12 +6,13 @@ In order to use the client, install the package by running:
 npm install cimpress-fulfillment-location --save
 ```
 
-Once the package is avialable, you can retrieve a specific fulfillment location as such:
+Once the package is available, you can retrieve a specific fulfillment location as such:
 ```
 const fulfillmentLocationId = 'abcd1234';
 let client = new FulfillmentLocationClient({
     log: defaultLogger,
-    cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
+    cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 },
+    timeout: 2000
 });
 
 client.getLocation(fulfillmentLocationId, req.headers.authorization)
