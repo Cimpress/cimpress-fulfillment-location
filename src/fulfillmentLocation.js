@@ -119,7 +119,7 @@ class FulfillmentLocationClient {
         });
     }
 
-    getLocations(authorization) {
+    getLocations(authorization, showArchived = false) {
 
         return new Promise((resolve, reject) => {
             handleAuthorization(authorization, reject);
@@ -132,7 +132,7 @@ class FulfillmentLocationClient {
             instance.defaults.headers.common['Authorization'] = authorization;
     
             if ( !this.useCaching ) {
-                return this._getFulfillmentLocationsFromService(instance)
+                return this._getFulfillmentLocationsFromService(instance, showArchived)
                     .then(locations => {
                         return resolve(locations);
                     })
@@ -150,7 +150,7 @@ class FulfillmentLocationClient {
 
                 if ( err || (fulfillmentLocations == undefined) ) {
 
-                    return this._getFulfillmentLocationsFromService(instance)
+                    return this._getFulfillmentLocationsFromService(instance, showArchived)
                         .then(locations => {
                             flCache.set(cacheKey, locations);
                             return resolve(locations);
@@ -173,9 +173,6 @@ class FulfillmentLocationClient {
             const requestConfig = {
                 method: 'GET',
                 url: endpoint,
-                qs: {
-                    showArchived: false
-                },
                 timeout: this.timeout
             };
 
@@ -203,14 +200,14 @@ class FulfillmentLocationClient {
         });
     }
 
-    _getFulfillmentLocationsFromService(instance) {
+    _getFulfillmentLocationsFromService(instance, showArchived) {
         return new Promise((resolve, reject) => {
             const endpoint = this.url + "/v1/fulfillmentlocations";
             const requestConfig = {
                 method: 'GET',
                 url: endpoint,
-                qs: {
-                    showArchived: false
+                params:{
+                    showArchived
                 },
                 timeout: this.timeout
             };
@@ -218,9 +215,9 @@ class FulfillmentLocationClient {
             if ( this.log && this.log.info ) {
                 this.log.info("->" + endpoint, requestConfig);
             }
-
+            
             instance
-                .request(requestConfig)
+            .request(requestConfig)
                 .then((res) => {
 
                     if ( this.log && this.log.info ) {

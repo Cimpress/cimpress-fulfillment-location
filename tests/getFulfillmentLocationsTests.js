@@ -41,6 +41,7 @@ describe('getLocations :: without cache ::', function () {
 
         nock('https://fulfillmentlocation.trdlnk.cimpress.io')
             .get("/v1/fulfillmentlocations")
+            .query({showArchived: false})
             .times(1)
             .reply(200, sampleLocations());
 
@@ -52,11 +53,28 @@ describe('getLocations :: without cache ::', function () {
             });
     });
 
+    it('FL returns 200 :: returns list of fulfillment locations correctly including archived fulfillers', function () {
+        nock.cleanAll();
+
+        nock('https://fulfillmentlocation.trdlnk.cimpress.io')
+            .get("/v1/fulfillmentlocations")
+            .query({showArchived: true})
+            .times(1)
+            .reply(200, sampleLocations());
+
+        let client = new FulfillmentLocationClient({log: defaultLogger()});
+        return client.getLocations('Bearer X', true)
+            .then(data => {
+                expect(data).to.deep.equal(sampleLocations());
+            });
+    });
+
     it('FL returns 500 :: returns an error', function () {
         nock.cleanAll();
 
         nock('https://fulfillmentlocation.trdlnk.cimpress.io')
             .get("/v1/fulfillmentlocations")
+            .query({showArchived: false})
             .times(1)
             .reply(500, 'Unable to load locations');
 
@@ -75,6 +93,7 @@ describe('getLocations :: without cache ::', function () {
     it('FL service returns 404 for invalid alphanum id', function () {
         nock('https://fulfillmentlocation.trdlnk.cimpress.io')
             .get("/v1/fulfillmentlocations")
+            .query({showArchived: false})
             .reply(404);
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
@@ -91,6 +110,7 @@ describe('getLocations :: without cache ::', function () {
     it('FL service returns 401 for unauthorized user', function () {
         nock('https://fulfillmentlocation.trdlnk.cimpress.io')
             .get("/v1/fulfillmentlocations")
+            .query({showArchived: false})
             .reply(401);
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
@@ -107,6 +127,7 @@ describe('getLocations :: without cache ::', function () {
     it('FL service returns 403 for forbidden', function () {
         nock('https://fulfillmentlocation.trdlnk.cimpress.io')
             .get("/v1/fulfillmentlocations")
+            .query({showArchived: false})
             .reply(403);
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
@@ -156,6 +177,7 @@ describe('getLocations :: with cache ::', function () {
 
         nock('https://fulfillmentlocation.trdlnk.cimpress.io')
             .get("/v1/fulfillmentlocations")
+            .query({showArchived: false})
             .times(1)
             .reply(200, sampleLocations());
 
@@ -175,6 +197,7 @@ describe('getLocations :: with cache ::', function () {
 
         nock('https://fulfillmentlocation.trdlnk.cimpress.io')
             .get("/v1/fulfillmentlocations")
+            .query({showArchived: false})
             .times(1)
             .reply(200, sampleLocations());
 
@@ -205,6 +228,7 @@ describe('getLocations :: with cache ::', function () {
 
         nock('https://fulfillmentlocation.trdlnk.cimpress.io')
             .get("/v1/fulfillmentlocations")
+            .query({showArchived: false})
             .times(1)
             .reply(500, 'Unable to load locations');
 
