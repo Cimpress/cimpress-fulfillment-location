@@ -31,6 +31,13 @@ client.getLocations(req.headers.authorization)
     .then(fulfillmentLocations => {
         // do stuff
     });
+
+// To include also archived fulfillment locations
+client.getLocations(req.headers.authorization, true)
+    .then(fulfillmentLocations => {
+        // do stuff
+    });
+
 ```
 
 ### Prerequisites
