@@ -47,7 +47,7 @@ describe('getLocations :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocations({authorization:'Bearer X'})
+        return client.getLocations({accessToken:'Bearer X'})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocations());
             });
@@ -67,7 +67,7 @@ describe('getLocations :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocations({authorization: 'Bearer X', skipCache: true})
+        return client.getLocations({accessToken: 'Bearer X', skipCache: true})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocations());
             });
@@ -83,7 +83,7 @@ describe('getLocations :: without cache ::', function () {
             .reply(200, sampleLocations());
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
-        return client.getLocations({authorization: 'Bearer X', showArchived: true})
+        return client.getLocations({accessToken: 'Bearer X', showArchived: true})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocations());
             });
@@ -102,7 +102,7 @@ describe('getLocations :: without cache ::', function () {
             .reply(200, sampleLocations());
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
-        return client.getLocations({authorization: 'Bearer X', showArchived: true, skipCache: true})
+        return client.getLocations({accessToken: 'Bearer X', showArchived: true, skipCache: true})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocations());
             });
@@ -119,7 +119,7 @@ describe('getLocations :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocations({authorization: 'Bearer X'})
+        return client.getLocations({accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -137,7 +137,7 @@ describe('getLocations :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocations({authorization: 'Bearer X'})
+        return client.getLocations({accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -154,7 +154,7 @@ describe('getLocations :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocations({authorization: 'Bearer X'})
+        return client.getLocations({accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -171,7 +171,7 @@ describe('getLocations :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocations({authorization: 'Bearer X'})
+        return client.getLocations({accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -199,7 +199,7 @@ describe('getLocations :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocations({authorization: 'invalid-format'})
+        return client.getLocations({accessToken: 'invalid-format'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -225,7 +225,7 @@ describe('getLocations :: with cache ::', function () {
             cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
         });
 
-        return client.getLocations({authorization: 'Bearer X'})
+        return client.getLocations({accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocations());
             });
@@ -248,7 +248,7 @@ describe('getLocations :: with cache ::', function () {
             cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
         });
 
-        return client.getLocations({authorization: 'Bearer X', skipCache: true})
+        return client.getLocations({accessToken: 'Bearer X', skipCache: true})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocations());
             });
@@ -268,14 +268,14 @@ describe('getLocations :: with cache ::', function () {
             cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
         });
 
-        return client.getLocations({authorization: 'Bearer X'})
+        return client.getLocations({accessToken: 'Bearer X'})
             .then(_data => {
                 nock('https://fulfillmentlocation.trdlnk.cimpress.io')
                     .get("/v1/fulfillmentlocations")
                     .times(1)
                     .reply(500, 'Unable to load locations');
 
-                client.getLocations({authorization: 'Bearer X'})
+                client.getLocations({accessToken: 'Bearer X'})
                     .then(data => {
                         expect(data).to.deep.equal(sampleLocations());
                     })
@@ -299,7 +299,7 @@ describe('getLocations :: with cache ::', function () {
             cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
         });
 
-        return client.getLocations({authorization: 'Bearer X'})
+        return client.getLocations({accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })

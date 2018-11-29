@@ -75,13 +75,13 @@ class FulfillmentLocationClient {
 
         return new Promise((resolve, reject) => {
             const opts = options || {};
-            handleAuthorization(opts.authorization, reject);
+            handleAuthorization(opts.accessToken, reject);
             const instance = axios.create({
                 baseURL: this.url,
                 timeout: this.timeout
             });
 
-            instance.defaults.headers.common['Authorization'] = opts.authorization;
+            instance.defaults.headers.common['Authorization'] = opts.accessToken;
 
             if ( !this.useCaching || opts.skipCache) {
                 return this._getFulfillmentLocationFromService(instance, locationId, opts)
@@ -93,7 +93,7 @@ class FulfillmentLocationClient {
                     });
             }
 
-            const cacheKey = 'fulfillmentLocation_' + locationId + '_' + opts.authorization;
+            const cacheKey = 'fulfillmentLocation_' + locationId + '_' + opts.accessToken;
             flCache.get(cacheKey, (err, fulfillmentLocation) => {
 
                 if ( err ) {
@@ -123,13 +123,13 @@ class FulfillmentLocationClient {
 
         return new Promise((resolve, reject) => {
             const opts = options || {};
-            handleAuthorization(opts.authorization, reject);
+            handleAuthorization(opts.accessToken, reject);
             const instance = axios.create({
                 baseURL: this.url,
                 timeout: this.timeout
             });
     
-            instance.defaults.headers.common['Authorization'] = opts.authorization;
+            instance.defaults.headers.common['Authorization'] = opts.accessToken;
     
             if ( !this.useCaching || opts.skipCache) {
                 return this._getFulfillmentLocationsFromService(instance, opts)
@@ -141,7 +141,7 @@ class FulfillmentLocationClient {
                     });
             }
 
-            const cacheKey = 'fulfillmentLocations_' + opts.authorization;
+            const cacheKey = 'fulfillmentLocations_' + opts.accessToken;
             flCache.get(cacheKey, (err, fulfillmentLocations) => {
 
                 if ( err ) {

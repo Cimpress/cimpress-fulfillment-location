@@ -38,7 +38,7 @@ describe('getLocation :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocation("bqcjg7qbvep", {authorization: 'Bearer X'})
+        return client.getLocation("bqcjg7qbvep", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocation());
             })
@@ -57,7 +57,7 @@ describe('getLocation :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocation("bqcjg7qbvep", {authorization: 'Bearer X', skipCache: true})
+        return client.getLocation("bqcjg7qbvep", {accessToken: 'Bearer X', skipCache: true})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocation());
             })
@@ -73,7 +73,7 @@ describe('getLocation :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocation("a7uqagcx0nz", {authorization: 'Bearer X'})
+        return client.getLocation("a7uqagcx0nz", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -90,7 +90,7 @@ describe('getLocation :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocation("189", {authorization: 'Bearer X'})
+        return client.getLocation("189", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocation());
             })
@@ -106,7 +106,7 @@ describe('getLocation :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocation("180", {authorization: 'Bearer X'})
+        return client.getLocation("180", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -123,7 +123,7 @@ describe('getLocation :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocation("180", {authorization: 'Bearer X'})
+        return client.getLocation("180", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -139,7 +139,7 @@ describe('getLocation :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocation("180", {authorization: 'Bearer X'})
+        return client.getLocation("180", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -167,7 +167,7 @@ describe('getLocation :: without cache ::', function () {
 
         let client = new FulfillmentLocationClient({log: defaultLogger()});
 
-        return client.getLocation("180", {authorization: 'invalid-format'})
+        return client.getLocation("180", {accessToken: 'invalid-format'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -193,7 +193,7 @@ describe('getLocation :: with cache ::', function () {
             cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
         });
 
-        return client.getLocation("bqcjg7qbvep", {authorization: 'Bearer X'})
+        return client.getLocation("bqcjg7qbvep", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocation());
             })
@@ -216,7 +216,7 @@ describe('getLocation :: with cache ::', function () {
             cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
         });
 
-        return client.getLocation("bqcjg7qbvep", {authorization: 'Bearer X', skipCache: true})
+        return client.getLocation("bqcjg7qbvep", {accessToken: 'Bearer X', skipCache: true})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocation());
             })
@@ -235,7 +235,7 @@ describe('getLocation :: with cache ::', function () {
             cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
         });
 
-        return client.getLocation("a7uqagcx0nz", {authorization: 'Bearer X'})
+        return client.getLocation("a7uqagcx0nz", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -255,7 +255,7 @@ describe('getLocation :: with cache ::', function () {
             cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
         });
 
-        return client.getLocation("189", {authorization: 'Bearer X'})
+        return client.getLocation("189", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.deep.equal(sampleLocation());
             })
@@ -274,7 +274,7 @@ describe('getLocation :: with cache ::', function () {
             cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
         });
 
-        return client.getLocation("180", {authorization: 'Bearer X'})
+        return client.getLocation("180", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })
@@ -295,7 +295,7 @@ describe('getLocation :: with cache ::', function () {
         });
 
         return client
-            .getLocation("bqcjg7qbvep", {authorization: 'Bearer X'})
+            .getLocation("bqcjg7qbvep", {accessToken: 'Bearer X'})
             .then(_data => {
                 // FL service is now returning a 404; client should use data in cache
                 nock('https://fulfillmentlocation.trdlnk.cimpress.io')
@@ -303,7 +303,7 @@ describe('getLocation :: with cache ::', function () {
                     .reply(500, "Unable to load information for 'bqcjg7qbvep'");
 
                 client
-                    .getLocation("bqcjg7qbvep", {authorization: 'Bearer X'})
+                    .getLocation("bqcjg7qbvep", {accessToken: 'Bearer X'})
                     .then(data => {
                         expect(data).to.deep.equal(sampleLocation());
                     })
@@ -325,7 +325,7 @@ describe('getLocation :: with cache ::', function () {
             cacheConfig: { stdTTL: 4 * 60 * 60, checkperiod: 5 * 60 }
         });
 
-        return client.getLocation("bqcjg7qbvep", {authorization: 'Bearer X'})
+        return client.getLocation("bqcjg7qbvep", {accessToken: 'Bearer X'})
             .then(data => {
                 expect(data).to.not.exist;
             })

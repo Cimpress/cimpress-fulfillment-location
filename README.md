@@ -16,7 +16,7 @@ let client = new FulfillmentLocationClient({
 });
 
 client.getLocation(fulfillmentLocationId, {
-    authorization: "Your access token",
+    accessToken: "Your access token",
     skipCache: false, // Skips the cache so the results will be fresh, if not set is false by default
 })
     .then(fulfillmentLocation => {
@@ -31,7 +31,7 @@ let client = new FulfillmentLocationClient({
 });
 
 client.getLocations({
-    authorization: "Your access token",
+    accessToken: "Your access token",
     showArchived: false, // By default is false, shows archived fulfillment locations
     skipCache: false // Skips the cache so the results will be fresh, if not set is false by default
 })
