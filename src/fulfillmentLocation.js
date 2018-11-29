@@ -53,7 +53,7 @@ const handleError = (err, reject) => {
         return reject(new ForbiddenError(err.statusText || err.message, err.data || err.response.data));
     }
     if ( err.status === 404 || (err.response && err.response.status === 404) ) {
-        return reject(new NotFoundError(err.statusText || err.message, err.data || err.response ? err.response.data : err));
+        return reject(new NotFoundError(err.statusText || err.message, err.data || err.response.data));
     }
     return reject(err);
 };
@@ -177,7 +177,7 @@ class FulfillmentLocationClient {
                 headers: {}
             };
             
-            if(options.skipCache){
+            if (options.skipCache){
                 requestConfig.headers['Cache-Control'] = 'no-cache';
                 requestConfig.headers['X-Cache-Id'] = Math.random();
             }
@@ -219,7 +219,7 @@ class FulfillmentLocationClient {
                 timeout: this.timeout
             };
 
-            if(options.skipCache){
+            if (options.skipCache){
                 requestConfig.headers['Cache-Control'] = 'no-cache';
                 requestConfig.headers['X-Cache-Id'] = Math.random();
             }
@@ -229,7 +229,7 @@ class FulfillmentLocationClient {
             }
             
             instance
-            .request(requestConfig)
+                .request(requestConfig)
                 .then((res) => {
 
                     if ( this.log && this.log.info ) {
