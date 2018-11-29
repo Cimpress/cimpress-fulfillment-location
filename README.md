@@ -15,7 +15,10 @@ let client = new FulfillmentLocationClient({
     timeout: 2000
 });
 
-client.getLocation(fulfillmentLocationId, req.headers.authorization)
+client.getLocation(fulfillmentLocationId{
+    authorization: "Your access token",
+    skipCache: false, // Skips the cache so the results will be fresh, if not set is false by default
+})
     .then(fulfillmentLocation => {
         // do stuff
     });
@@ -27,13 +30,11 @@ let client = new FulfillmentLocationClient({
     log: defaultLogger
 });
 
-client.getLocations(req.headers.authorization)
-    .then(fulfillmentLocations => {
-        // do stuff
-    });
-
-// To include also archived fulfillment locations
-client.getLocations(req.headers.authorization, true)
+client.getLocations({
+    authorization: "Your access token",
+    showArchived: false, // By default is false, shows archived fulfillment locations
+    skipCache: false // Skips the cache so the results will be fresh, if not set is false by default
+})
     .then(fulfillmentLocations => {
         // do stuff
     });

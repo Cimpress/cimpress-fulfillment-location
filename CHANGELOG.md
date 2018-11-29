@@ -11,3 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.2] - 2018-10-03
 ### Added
 - Enable showArchived flag for listing fulfillment locations.
+
+## [1.0] - 2018-11-29
+### Changed
+- Aditional properties of getLocations and getLocation moved to a single object paramenter `options`. 
+
+### Added
+- Added new skipCache option that disables all the caches.

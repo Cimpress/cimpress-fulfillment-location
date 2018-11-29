@@ -53,7 +53,7 @@ const handleError = (err, reject) => {
         return reject(new ForbiddenError(err.statusText || err.message, err.data || err.response.data));
     }
     if ( err.status === 404 || (err.response && err.response.status === 404) ) {
-        return reject(new NotFoundError(err.statusText || err.message, err.data || err.response.data));
+        return reject(new NotFoundError(err.statusText || err.message, err.data || err.response ? err.response.data : err));
     }
     return reject(err);
 };
@@ -71,20 +71,20 @@ class FulfillmentLocationClient {
         this.timeout = config.timeout || 2000;
     }
 
-    getLocation(locationId, authorization) {
+    getLocation(locationId, options) {
 
         return new Promise((resolve, reject) => {
-            handleAuthorization(authorization, reject);
-            
+            const opts = options || {};
+            handleAuthorization(opts.authorization, reject);
             const instance = axios.create({
                 baseURL: this.url,
                 timeout: this.timeout
             });
 
-            instance.defaults.headers.common['Authorization'] = authorization;
+            instance.defaults.headers.common['Authorization'] = opts.authorization;
 
-            if ( !this.useCaching ) {
-                return this._getFulfillmentLocationFromService(instance, locationId)
+            if ( !this.useCaching || opts.skipCache) {
+                return this._getFulfillmentLocationFromService(instance, locationId, opts)
                     .then(location => {
                         return resolve(location);
                     })
@@ -93,7 +93,7 @@ class FulfillmentLocationClient {
                     });
             }
 
-            const cacheKey = 'fulfillmentLocation_' + locationId + '_' + authorization;
+            const cacheKey = 'fulfillmentLocation_' + locationId + '_' + opts.authorization;
             flCache.get(cacheKey, (err, fulfillmentLocation) => {
 
                 if ( err ) {
@@ -102,7 +102,7 @@ class FulfillmentLocationClient {
 
                 if ( err || (fulfillmentLocation == undefined) ) {
 
-                    return this._getFulfillmentLocationFromService(instance, locationId)
+                    return this._getFulfillmentLocationFromService(instance, locationId, opts)
                         .then(location => {
                             flCache.set(cacheKey, location);
                             return resolve(location);
@@ -119,20 +119,20 @@ class FulfillmentLocationClient {
         });
     }
 
-    getLocations(authorization, showArchived = false) {
+    getLocations(options) {
 
         return new Promise((resolve, reject) => {
-            handleAuthorization(authorization, reject);
-
+            const opts = options || {};
+            handleAuthorization(opts.authorization, reject);
             const instance = axios.create({
                 baseURL: this.url,
                 timeout: this.timeout
             });
     
-            instance.defaults.headers.common['Authorization'] = authorization;
+            instance.defaults.headers.common['Authorization'] = opts.authorization;
     
-            if ( !this.useCaching ) {
-                return this._getFulfillmentLocationsFromService(instance, showArchived)
+            if ( !this.useCaching || opts.skipCache) {
+                return this._getFulfillmentLocationsFromService(instance, opts)
                     .then(locations => {
                         return resolve(locations);
                     })
@@ -141,7 +141,7 @@ class FulfillmentLocationClient {
                     });
             }
 
-            const cacheKey = 'fulfillmentLocations_' + authorization;
+            const cacheKey = 'fulfillmentLocations_' + opts.authorization;
             flCache.get(cacheKey, (err, fulfillmentLocations) => {
 
                 if ( err ) {
@@ -150,7 +150,7 @@ class FulfillmentLocationClient {
 
                 if ( err || (fulfillmentLocations == undefined) ) {
 
-                    return this._getFulfillmentLocationsFromService(instance, showArchived)
+                    return this._getFulfillmentLocationsFromService(instance, opts)
                         .then(locations => {
                             flCache.set(cacheKey, locations);
                             return resolve(locations);
@@ -167,14 +167,20 @@ class FulfillmentLocationClient {
         });
     }
 
-    _getFulfillmentLocationFromService(instance, fulfillmentLocationId) {
+    _getFulfillmentLocationFromService(instance, fulfillmentLocationId, options) {
         return new Promise((resolve, reject) => {
             const endpoint = this.url + "/v1/fulfillmentlocations/" + fulfillmentLocationId;
             const requestConfig = {
                 method: 'GET',
                 url: endpoint,
-                timeout: this.timeout
+                timeout: this.timeout,
+                headers: {}
             };
+            
+            if(options.skipCache){
+                requestConfig.headers['Cache-Control'] = 'no-cache';
+                requestConfig.headers['X-Cache-Id'] = Math.random();
+            }
 
             if ( this.log && this.log.info ) {
                 this.log.info("->" + endpoint, requestConfig);
@@ -200,17 +206,23 @@ class FulfillmentLocationClient {
         });
     }
 
-    _getFulfillmentLocationsFromService(instance, showArchived) {
+    _getFulfillmentLocationsFromService(instance, options) {
         return new Promise((resolve, reject) => {
             const endpoint = this.url + "/v1/fulfillmentlocations";
             const requestConfig = {
                 method: 'GET',
                 url: endpoint,
                 params:{
-                    showArchived
+                    showArchived: options.showArchived || false
                 },
+                headers: {},
                 timeout: this.timeout
             };
+
+            if(options.skipCache){
+                requestConfig.headers['Cache-Control'] = 'no-cache';
+                requestConfig.headers['X-Cache-Id'] = Math.random();
+            }
 
             if ( this.log && this.log.info ) {
                 this.log.info("->" + endpoint, requestConfig);
