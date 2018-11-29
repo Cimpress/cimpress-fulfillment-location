@@ -15,7 +15,7 @@ let client = new FulfillmentLocationClient({
     timeout: 2000
 });
 
-client.getLocation(fulfillmentLocationId{
+client.getLocation(fulfillmentLocationId, {
     authorization: "Your access token",
     skipCache: false, // Skips the cache so the results will be fresh, if not set is false by default
 })
