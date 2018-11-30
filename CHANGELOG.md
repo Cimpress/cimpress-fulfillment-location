@@ -18,3 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - Added new skipCache option that disables all the caches.
+
+## [1.0.1] - 2018-11-29
+### Fix
+- Solve critical vulnerability caused by  growl, a dependency of mocha.
