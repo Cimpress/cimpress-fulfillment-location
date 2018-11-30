@@ -1,11 +1,6 @@
 const fs = require('fs');
-const npm = /^win/.test(process.platform)
-    ? 'npm.cmd'
-    : 'npm';
 
 module.exports = function (grunt) {
-
-    const version = "0.1." + process.env.TRAVIS_BUILD_NUMBER;
 
     require('load-grunt-tasks')(grunt);
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -25,12 +20,6 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        exec: {
-            setVersion: {
-                cwd: 'dist',
-                command: `${npm} version ${version} --no-git-tag-version --allow-same-version`
-            }
-        },
         babel: {
             options: {
                 sourceMap: true,
@@ -44,5 +33,5 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('build', ['clean:dist', 'babel', 'copy', 'exec:setVersion']);
+    grunt.registerTask('build', ['clean:dist', 'babel', 'copy']);
 };
