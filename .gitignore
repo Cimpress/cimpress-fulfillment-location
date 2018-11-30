@@ -7,3 +7,4 @@ typings/
 jsconfig.json
 .idea/
 .nyc_output/
+dist/
