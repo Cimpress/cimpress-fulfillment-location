@@ -1,6 +1,6 @@
 {
   "name": "cimpress-fulfillment-location",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "LogisticsQuotingandPlanning@cimpress.com",
   "description": "A simple client for the Cimpress Fulfillment Location service",
   "license": "Apache-2.0",
