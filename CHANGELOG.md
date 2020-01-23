@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.4] - 2020-01-23
+### Add
+- Add the posibility of filtering fulfillment locations by fulfiller
+
 ## [1.0.3] - 2019-09-10
 ### Fix
 - Applying security vulnerabilities patches

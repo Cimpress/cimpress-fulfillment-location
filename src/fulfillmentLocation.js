@@ -219,6 +219,10 @@ class FulfillmentLocationClient {
                 timeout: this.timeout
             };
 
+            if (options.fulfillerId) {
+                requestConfig.params.fulfillerId = options.fulfillerId;
+            }
+
             if (options.skipCache){
                 requestConfig.headers['Cache-Control'] = 'no-cache';
                 requestConfig.headers['X-Cache-Id'] = Math.random();

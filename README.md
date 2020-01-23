@@ -32,6 +32,7 @@ let client = new FulfillmentLocationClient({
 
 client.getLocations({
     accessToken: "Your access token",
+    fulfillerId: "Your fulfiller Id", // Optional
     showArchived: false, // By default is false, shows archived fulfillment locations
     skipCache: false // Skips the cache so the results will be fresh, if not set is false by default
 })
