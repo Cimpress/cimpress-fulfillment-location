@@ -5,7 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.0.5] - 2020-08-28
-### Fix
+### Changed
+- Move to Node.js major version 12
+
+### Fixed
 - On error from Fulfillment Location, fix the returned name of the error
 
 ## [1.0.4] - 2020-01-23
