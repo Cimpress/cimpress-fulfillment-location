@@ -10,7 +10,7 @@ let axios = require('axios');
 
 function UnauthorizedError(message, extra) {
     Error.captureStackTrace(this, this.constructor);
-    this.name = this.constructor.name;
+    this.name = 'UnauthorizedError';
     this.message = message || 'Unauthorized';
     this.status = 401;
     this.additionalData = extra;
@@ -18,7 +18,7 @@ function UnauthorizedError(message, extra) {
 
 function ForbiddenError(message, extra) {
     Error.captureStackTrace(this, this.constructor);
-    this.name = this.constructor.name;
+    this.name = 'ForbiddenError';
     this.message = message || 'Forbidden';
     this.status = 403;
     this.additionalData = extra;
@@ -26,7 +26,7 @@ function ForbiddenError(message, extra) {
 
 function NotFoundError(message, extra) {
     Error.captureStackTrace(this, this.constructor);
-    this.name = this.constructor.name;
+    this.name = 'NotFoundError';
     this.message = message || 'Not found';
     this.status = 404;
     this.additionalData = extra;
