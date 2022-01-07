@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.8] - 2022-01-07
+### Fix
+- Fix incomplete package deployment
+
 ## [1.0.7] - 2022-01-07
 ### Fix
 - Remove dependency on non-standard Error.captureStackTrace() method
