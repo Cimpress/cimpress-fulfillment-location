@@ -9,27 +9,27 @@ let axios = require('axios');
 // --- Predefined errors ---
 
 function UnauthorizedError(message, extra) {
-    Error.captureStackTrace(this, this.constructor);
-    this.name = 'UnauthorizedError';
-    this.message = message || 'Unauthorized';
-    this.status = 401;
-    this.additionalData = extra;
+    let error = new Error(message || 'Unauthorized');
+    error.name = 'UnauthorizedError';
+    error.status = 401;
+    error.additionalData = extra;
+    return error;
 }
 
 function ForbiddenError(message, extra) {
-    Error.captureStackTrace(this, this.constructor);
-    this.name = 'ForbiddenError';
-    this.message = message || 'Forbidden';
-    this.status = 403;
-    this.additionalData = extra;
+    let error = new Error(message || 'Forbidden');
+    error.name = 'ForbiddenError';
+    error.status = 403;
+    error.additionalData = extra;
+    return error;
 }
 
 function NotFoundError(message, extra) {
-    Error.captureStackTrace(this, this.constructor);
-    this.name = 'NotFoundError';
-    this.message = message || 'Not found';
-    this.status = 404;
-    this.additionalData = extra;
+    let error = new Error(message || 'Not found');
+    error.name = 'NotFoundError';
+    error.status = 404;
+    error.additionalData = extra;
+    return error;
 }
 
 // --- END ---

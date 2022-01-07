@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.7] - 2022-01-07
+### Fix
+- Remove dependency on non-standard Error.captureStackTrace() method
+
 ## [1.0.6] - 2021-03-16
 ### Fix
 - Applying security vulnerabilities patches
